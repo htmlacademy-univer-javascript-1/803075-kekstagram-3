@@ -10,7 +10,7 @@ function createPhotoData(id, url, description, likes, comments) {
   };
 }
 
-function generatePhotos() {
+export function generatePhotos() {
   const result = [];
   const count = 25;
   for (let i = 1; i <= count; i++) {
@@ -26,5 +26,3 @@ function generatePhotos() {
   }
   return result;
 }
-
-console.log(generatePhotos());

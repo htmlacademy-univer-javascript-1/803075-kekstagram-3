@@ -20,6 +20,6 @@ export function getRandomNumber (a, b) {
  * @param {number} maxLength - максимальная длина строки
  * @returns {boolean}
  */
-function isStringCorrect (str, maxLength) {
+export function isStringCorrect (str, maxLength) {
   return str.length <= maxLength;
 }
