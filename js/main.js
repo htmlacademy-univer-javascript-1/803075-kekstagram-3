@@ -6,7 +6,7 @@
  * @param {number} to - конец диапазона
  * @returns {number}
  */
-function getRandomNumber (from, to) {
+function getRandomNumber (a, b) {
   const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
   const upper = Math.floor(Math.max(Math.abs(a), Math.abs(b)));
   const result = Math.random() * (upper - lower + 1) + lower;
@@ -42,7 +42,7 @@ function generatePhotos() {
       createPhotoData(
         i,
         "photos/" + i + ".jpg",
-        "Фото номер" + i,
+        "Фото номер " + i,
         getRandomNumber(15, 200),
         getRandomNumber(0, 200)
       )
@@ -50,3 +50,5 @@ function generatePhotos() {
   }
   return result;
 }
+
+console.log(generatePhotos());
