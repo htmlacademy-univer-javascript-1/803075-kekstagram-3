@@ -31,18 +31,18 @@ function createPhotoData(id, url, description, likes, comments) {
     description: description,
     likes: likes,
     comments: comments
-  }
+  };
 }
 
 function generatePhotos() {
-  let result = []
+  const result = [];
   const count = 25;
-  for (let i = 0; i < count; i++) {
+  for (let i = 1; i <= count; i++) {
     result.push(
       createPhotoData(
         i,
-        "photos/" + i + ".jpg",
-        "Фото номер " + i,
+        `photos/${i}.jpg`,
+        `Фото номер ${i}`,
         getRandomNumber(15, 200),
         getRandomNumber(0, 200)
       )
@@ -50,3 +50,5 @@ function generatePhotos() {
   }
   return result;
 }
+
+console.log(generatePhotos());
