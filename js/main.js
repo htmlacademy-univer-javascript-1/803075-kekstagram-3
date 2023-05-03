@@ -6,15 +6,11 @@
  * @param {number} to - конец диапазона
  * @returns {number}
  */
-let randomNumber = function (from, to) {
-  if (from > to) {
-    return -1;
-  }
-  if (from == to) {
-    return from;
-  }
-  let rand = from + Math.random() * (to + 1 - from);
-  return Math.floor(rand);
+function getRandomNumber (a, b) {
+  const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
+  const upper = Math.floor(Math.max(Math.abs(a), Math.abs(b)));
+  const result = Math.random() * (upper - lower + 1) + lower;
+  return Math.floor(result);
 }
 
 /**
@@ -24,6 +20,35 @@ let randomNumber = function (from, to) {
  * @param {number} maxLength - максимальная длина строки
  * @returns {boolean}
  */
-let isStringCorrect = function(str, maxLength) {
+function isStringCorrect (str, maxLength) {
   return str.length <= maxLength;
 }
+
+function createPhotoData(id, url, description, likes, comments) {
+  return {
+    id: id,
+    url: url,
+    description: description,
+    likes: likes,
+    comments: comments
+  };
+}
+
+function generatePhotos() {
+  const result = [];
+  const count = 25;
+  for (let i = 1; i <= count; i++) {
+    result.push(
+      createPhotoData(
+        i,
+        `photos/${i}.jpg`,
+        `Фото номер ${i}`,
+        getRandomNumber(15, 200),
+        getRandomNumber(0, 200)
+      )
+    );
+  }
+  return result;
+}
+
+console.log(generatePhotos());
