@@ -79,17 +79,6 @@ export const changePreviewScale = (isIncrease) => {
   preview.style.transform = `scale(${scale/100})`;
 };
 
-export const showSuccesMessage = () => {
-  const temple = document.querySelector('#success').content;
-  const element = temple.querySelector('.success').cloneNode(true);
-
-  const button = element.querySelector('.success__button');
-
-  button.addEventListener('click', () => {element.remove();});
-
-  document.body.appendChild(element);
-};
-
 export const showOverlay = () => {
   overlay.classList.remove('hidden');
   document.body.classList.add('modal-open');

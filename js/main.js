@@ -2,7 +2,6 @@ import {fillPicturesList} from './gallery.js';
 import './overlay_controller.js';
 import {
   mainForm,
-  showSuccesMessage,
   applyEffectOnPreview,
   changePreviewScale,
   showOverlay,
@@ -11,7 +10,7 @@ import {
   showOverlayWithImage
 } from './overlay_controller.js';
 import {sendFormDataToServer} from './server.js';
-import {showError} from'./errors.js';
+import {showErrorMessage, showSuccesMessage} from'./messages.js';
 
 const pristine = new Pristine(mainForm, undefined, false);
 
@@ -39,10 +38,10 @@ mainForm.addEventListener('submit', (evt) => {
         hideOverlayAndResetForm();
         showSuccesMessage();
       },
-      (error) => {
+      () => {
         submitButton.disabled = false;
         hideOverlay();
-        showError(error, 'Отправить еще раз', () => {showOverlay();});
+        showErrorMessage(() => {showOverlay();});
       });
   }
 });
@@ -67,20 +66,19 @@ uploadImageInput.addEventListener('change', () => {
   }
   showOverlayWithImage(url);
 
-  const cancelButtonCallback = () => {
+  const onCancelButtonClick = () => {
     hideOverlayAndResetForm();
-    document.removeEventListener('keydown', escapeKeydownCallback);
-    uploadCancelButton.removeEventListener('click', cancelButtonCallback);
+    document.removeEventListener('keydown', onEsapeKeydown);
+    uploadCancelButton.removeEventListener('click', onCancelButtonClick);
   };
 
-  //объявил так, чтобы в cancelButtonCallback можно было удалить listener
-  function escapeKeydownCallback(evt) {
+  function onEsapeKeydown(evt) {
     if (evt.code === 'Escape') {
-      cancelButtonCallback();
+      onCancelButtonClick();
     }
   }
 
-  document.addEventListener('keydown', escapeKeydownCallback);
-  uploadCancelButton.addEventListener('click', cancelButtonCallback);
+  document.addEventListener('keydown', onEsapeKeydown);
+  uploadCancelButton.addEventListener('click', onCancelButtonClick);
 
 });
