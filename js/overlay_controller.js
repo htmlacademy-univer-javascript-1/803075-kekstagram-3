@@ -6,13 +6,39 @@ import {
   EFFECTS_SETTINGS
 } from './overlay_const.js';
 
-export const overlay = document.querySelector('.img-upload__overlay');
-export const mainForm = document.querySelector('.img-upload__form');
-
 const slider = document.querySelector('.effect-level__slider');
 const scaleControllerValue = document.querySelector('.scale__control--value');
 const preview = document.querySelector('.img-upload__preview').querySelector('img');
 const effectLevelValue = document.querySelector('.effect-level__value');
+export const overlay = document.querySelector('.img-upload__overlay');
+export const mainForm = document.querySelector('.img-upload__form');
+
+const resetForm = () => {
+  mainForm.reset();
+  preview.classList = [];
+  preview.style.filter = null;
+  preview.style.transform = null;
+  if (slider.noUiSlider) {
+    slider.noUiSlider.destroy();
+  }
+};
+
+const createSliderForEffect = (effectSettings) => {
+  noUiSlider.create(slider, {
+    start: effectSettings.max,
+    connect: 'lower',
+    range: {
+      'min': effectSettings.min,
+      'max': effectSettings.max
+    },
+    step: effectSettings.step,
+    tooltips: {
+      to: function(numericValue) {
+        return `${numericValue.toFixed(1)}${effectSettings.unit}`;
+      }
+    }
+  });
+};
 
 export const applyEffectOnPreview = () => {
   const checkedRadio = document.querySelector('input[name="effect"]:checked');
@@ -84,30 +110,4 @@ export const hideOverlayAndResetForm = () => {
   resetForm();
 };
 
-const resetForm = () => {
-  mainForm.reset();
-  preview.classList = [];
-  preview.style.filter = null;
-  preview.style.transform = null;
-  if (slider.noUiSlider) {
-    slider.noUiSlider.destroy();
-  }
 
-};
-
-const createSliderForEffect = (effectSettings) => {
-  noUiSlider.create(slider, {
-    start: effectSettings.max,
-    connect: 'lower',
-    range: {
-      'min': effectSettings.min,
-      'max': effectSettings.max
-    },
-    step: effectSettings.step,
-    tooltips: {
-      to: function(numericValue) {
-        return `${numericValue.toFixed(1)}${effectSettings.unit}`;
-      }
-    }
-  });
-};

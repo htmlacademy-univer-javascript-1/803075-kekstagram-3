@@ -1,6 +1,19 @@
 import { getGalleryFromServer } from './server.js';
 import { showError } from './errors.js';
 
+const createPictureElement = (data, element) => {
+  const clone = element.cloneNode(true);
+  const image = clone.querySelector('.picture__img');
+  const likes = clone.querySelector('.picture__likes');
+  const comments = clone.querySelector('.picture__comments');
+
+  image.src = data.url;
+  likes.textContent = data.likes;
+  comments.textContent = data.comments;
+
+  return clone;
+};
+
 export const fillPicturesList =  (container) => {
   const temple = document.querySelector('#picture').content;
   const element = temple.querySelector('.picture');
@@ -30,15 +43,3 @@ export const fillPicturesList =  (container) => {
     );
 };
 
-const createPictureElement = (data, element) => {
-  const clone = element.cloneNode(true);
-  const image = clone.querySelector('.picture__img');
-  const likes = clone.querySelector('.picture__likes');
-  const comments = clone.querySelector('.picture__comments');
-
-  image.src = data.url;
-  likes.textContent = data.likes;
-  comments.textContent = data.comments;
-
-  return clone;
-};
