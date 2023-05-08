@@ -66,14 +66,21 @@ uploadImageInput.addEventListener('change', () => {
     url = URL.createObjectURL(imageFile);
   }
   showOverlayWithImage(url);
-});
 
-uploadCancelButton.addEventListener('click', () => {
-  hideOverlayAndResetForm();
-});
-
-document.addEventListener('keydown', (evt) => {
-  if (evt.code === 'Escape') {
+  const cancelButtonCallback = () => {
     hideOverlayAndResetForm();
+    document.removeEventListener('keydown', escapeKeydownCallback);
+    uploadCancelButton.removeEventListener('click', cancelButtonCallback);
+  };
+
+  //объявил так, чтобы в cancelButtonCallback можно было удалить listener
+  function escapeKeydownCallback(evt) {
+    if (evt.code === 'Escape') {
+      cancelButtonCallback();
+    }
   }
+
+  document.addEventListener('keydown', escapeKeydownCallback);
+  uploadCancelButton.addEventListener('click', cancelButtonCallback);
+
 });
