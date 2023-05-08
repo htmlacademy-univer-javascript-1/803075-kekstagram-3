@@ -1,16 +1,19 @@
 import {fillPicturesList} from './gallery.js';
 import './overlay_controller.js';
 import {
-  overlay,
   mainForm,
-  isFormCorrect,
-  getErrorMessage,
-  showError,
+  showSuccesMessage,
   applyEffectOnPreview,
   changePreviewScale,
   showOverlay,
-  hideOverlay
+  hideOverlay,
+  hideOverlayAndResetForm,
+  showOverlayWithImage
 } from './overlay_controller.js';
+import {sendFormDataToServer} from './server.js';
+import {showError} from'./errors.js';
+
+const pristine = new Pristine(mainForm, undefined, false);
 
 const picturesList = document.querySelector('.pictures');
 fillPicturesList(picturesList);
@@ -20,14 +23,26 @@ const uploadCancelButton = document.querySelector('#upload-cancel');
 const scaleControllerDecrease = document.querySelector('.scale__control--smaller');
 const scaleControllerIncrease = document.querySelector('.scale__control--bigger');
 const effectsList = document.querySelector('.effects__list');
-
+const submitButton = document.querySelector('#upload-submit');
 
 mainForm.addEventListener('submit', (evt) => {
-  if (!isFormCorrect()) {
-    evt.preventDefault();
-    const message = getErrorMessage();
-    showError(message.title, message.button);
-    overlay.classList.add('hidden');
+  evt.preventDefault();
+
+  if (pristine.validate()) {
+    submitButton.disabled = true;
+    sendFormDataToServer(new FormData(mainForm),
+      (response) => {
+        submitButton.disabled = false;
+        if (!response.ok) {
+          throw `Error. Response status: ${response.status}`;
+        }
+        hideOverlayAndResetForm();
+        showSuccesMessage();
+      },
+      (error) => {
+        hideOverlay();
+        showError(error, 'Отправить еще раз', () => {showOverlay();});
+      });
   }
 });
 
@@ -44,15 +59,20 @@ scaleControllerIncrease.addEventListener('click', () => {
 });
 
 uploadImageInput.addEventListener('change', () => {
-  showOverlay();
+  const imageFile = uploadImageInput.files[0];
+  let url = null;
+  if (imageFile) {
+    url = URL.createObjectURL(imageFile);
+  }
+  showOverlayWithImage(url);
 });
 
 uploadCancelButton.addEventListener('click', () => {
-  hideOverlay();
+  hideOverlayAndResetForm();
 });
 
 document.addEventListener('keydown', (evt) => {
   if (evt.code === 'Escape') {
-    hideOverlay();
+    hideOverlayAndResetForm();
   }
 });
