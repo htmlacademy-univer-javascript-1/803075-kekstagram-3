@@ -40,6 +40,7 @@ mainForm.addEventListener('submit', (evt) => {
         showSuccesMessage();
       },
       (error) => {
+        submitButton.disabled = false;
         hideOverlay();
         showError(error, 'Отправить еще раз', () => {showOverlay();});
       });
