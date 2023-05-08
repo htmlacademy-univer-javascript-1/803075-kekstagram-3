@@ -1,5 +1,5 @@
 import { getGalleryFromServer } from './server.js';
-import { showError } from './errors.js';
+import { showErrorMessage } from './messages.js';
 
 const createPictureElement = (data, element) => {
   const clone = element.cloneNode(true);
@@ -28,18 +28,14 @@ export const fillPicturesList =  (container) => {
         }
         response.json().then(
           (pictures) => {
-            for (const picture of pictures) {
+            pictures.forEach((picture) => {
               const newPicture = createPictureElement(picture, element);
               container.appendChild(newPicture);
-            }
+            });
           }
         );
       }
     )
-    .catch(
-      (error) => {
-        showError(error, 'Ошибка получения данных с сервера');
-      }
-    );
+    .catch(() => showErrorMessage());
 };
 
